@@ -1,0 +1,10 @@
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 147.127.48.103
+netmask 255.255.240.0
+broadcast 147.127.63.255
+network 147.127.48.0
+#gateway XXX.XXX.XXX.XXX
