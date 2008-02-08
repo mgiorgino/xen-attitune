@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Xen attiTune" company="N7" webLink="http://" view-date="2008-01-26" view-index="0" gantt-divider-location="263" resource-divider-location="301" version="2.0">
+<project name="Xen attiTune" company="N7" webLink="http://" view-date="2008-01-28" view-index="0" gantt-divider-location="263" resource-divider-location="301" version="2.0">
     <description/>
     <view zooming-state="default:1" id="gantt-chart"/>
     <view id="resource-table">
-        <field id="0" name="Nom" width="54" order="0"/>
-        <field id="1" name="Rôle par défaut" width="45" order="1"/>
+        <field id="0" name="Nom" width="55" order="0"/>
+        <field id="1" name="Rôle par défaut" width="44" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -44,7 +44,7 @@
         <task id="1" name="APIs" color="#8cb6ce" meeting="false" start="2008-01-28" duration="5" complete="100" priority="1" expand="true">
             <depend id="5" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="5" name="Spécification" color="#8cb6ce" meeting="false" start="2008-02-04" duration="4" complete="79" priority="1" expand="true">
+        <task id="5" name="Spécification" color="#8cb6ce" meeting="false" start="2008-02-04" duration="4" complete="94" priority="1" expand="true">
             <depend id="8" type="2" difference="0" hardness="Strong"/>
             <task id="19" name="Rédaction" color="#8cb6ce" meeting="false" start="2008-02-04" duration="2" complete="100" priority="1" expand="false">
                 <depend id="15" type="2" difference="0" hardness="Strong"/>
@@ -53,14 +53,14 @@
                 <depend id="6" type="2" difference="0" hardness="Strong"/>
                 <depend id="17" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="17" name="Mise au point Client 2" color="#8cb6ce" meeting="false" start="2008-02-07" duration="1" complete="17" priority="1" expand="false">
+            <task id="17" name="Mise au point Client 2" color="#8cb6ce" meeting="false" start="2008-02-07" duration="1" complete="77" priority="1" expand="false">
                 <depend id="8" type="2" difference="0" hardness="Strong"/>
             </task>
         </task>
-        <task id="6" name="Architecture" color="#8cb6ce" meeting="false" start="2008-02-07" duration="2" complete="6" priority="1" expand="true">
+        <task id="6" name="Architecture" color="#8cb6ce" meeting="false" start="2008-02-07" duration="2" complete="18" priority="1" expand="true">
             <depend id="8" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="7" name="Planning détaillé" color="#8cb6ce" meeting="false" start="2008-02-08" duration="1" complete="0" priority="1" expand="true">
+        <task id="7" name="Planning détaillé" color="#8cb6ce" meeting="false" start="2008-02-08" duration="1" complete="12" priority="1" expand="true">
             <depend id="8" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="8" name="Développement" color="#8cb6ce" meeting="false" start="2008-02-11" duration="13" complete="0" priority="1" expand="true">
