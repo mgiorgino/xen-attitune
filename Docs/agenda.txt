@@ -1,0 +1,74 @@
+Meeting
+-------
+Chairman (Z) - 2mn:
+	-Welcome
+	-Last meeting summary
+	-Last meeting TODOs
+		* Summary (J, M)
+		* Architecture (H, D)
+		* Test Plan (H, D, J, M, Z)
+	-Introduction to summary
+(J, M) - 5mn:
+	-PPT
+(H, D) - 4mn:
+	-Machines & Software
+	-Network architecture
+	-Data storage -> NFS
+(Group) - 5mn:
+	-Discussion about NFS
+	-Discussion about switch/hub
+	-Server
+	-No Xen on server
+(Z) - 1mn:
+	-Intro on requirements
+	-Test plan for each requirement
+(Group)- 10mn:
+	-R1 - EF2
+	-R2 - EF3
+	-R3 - EF4
+	-R4 - EF5
+	-R5 - EF6
+	-Roue de secours -> Next EFs
+
+(Z) - 3mn:
+	-Next meeting objectives
+	-Task distribution
+
+(Total) : 30mn 
+
+Details:
+--------
+	Architecture
+	------------
+	NFS server on single server
+	DHCP on the same server
+	Dedicated server 
+	Switch -> hub
+	Need a hub and wires -> CRI
+
+	Test Plan
+	---------
+	EF2
+		Regular Ping
+		RMI Server/Client requests
+		Streaming service
+
+
+	EF3
+		Printf every 10ms
+		Output in a file
+
+	EF4
+		while fork -> out of control
+		Eclipse -> X server required
+		Facto LU
+
+	EF5
+		watch with a hand clock
+		Programm using CPU time on host and new host -> time referential
+		Go and back time
+		Relative time with RMI call
+
+	EF6
+		One way migration
+		Comparison of local and double migration execution
