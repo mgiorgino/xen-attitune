@@ -28,7 +28,6 @@ Chairman (Z) - 2mn:
 	-R3 - EF4
 	-R4 - EF5
 	-R5 - EF6
-	-Roue de secours -> Next EFs
 
 (Z) - 3mn:
 	-Next meeting objectives
