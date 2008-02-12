@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Xen attiTune" company="N7" webLink="http://" view-date="2008-02-06" view-index="0" gantt-divider-location="353" resource-divider-location="301" version="2.0">
+<project name="Xen attiTune" company="N7" webLink="http://" view-date="2008-02-01" view-index="0" gantt-divider-location="353" resource-divider-location="301" version="2.0">
     <description/>
     <view zooming-state="default:2" id="gantt-chart"/>
     <view id="resource-table">
@@ -107,12 +107,12 @@
             </task>
         </task>
         <task id="48" name="Technical Report" color="#8cb6ce" meeting="false" start="2008-02-11" duration="5" complete="5" priority="1" expand="true"/>
-        <task id="21" name="Conclusion" color="#8cb6ce" meeting="false" start="2008-02-08" duration="26" complete="0" priority="1" expand="true">
-            <task id="23" name="Préparation" color="#8cb6ce" meeting="false" start="2008-03-04" duration="8" complete="0" priority="1" expand="true">
+        <task id="21" name="Conclusion" color="#8cb6ce" meeting="false" start="2008-02-08" duration="26" complete="0" priority="1" expand="false">
+            <task id="23" name="Préparation" color="#8cb6ce" meeting="false" start="2008-03-04" duration="8" complete="0" priority="1" expand="false">
                 <depend id="22" type="2" difference="0" hardness="Strong"/>
                 <task id="50" name="Prep 1" color="#8cb6ce" meeting="false" start="2008-03-04" duration="8" complete="0" priority="1" expand="false"/>
             </task>
-            <task id="20" name="Rapport" color="#8cb6ce" meeting="false" start="2008-02-08" duration="23" complete="0" priority="1" expand="false">
+            <task id="20" name="Rapport" color="#8cb6ce" meeting="false" start="2008-02-08" duration="23" complete="0" priority="1" expand="true">
                 <depend id="22" type="2" difference="0" hardness="Strong"/>
                 <task id="52" name="Inclusion Specs" color="#8cb6ce" meeting="false" start="2008-02-08" duration="8" complete="0" priority="1" expand="false"/>
                 <task id="54" name="Inclusion Architecture" color="#8cb6ce" meeting="false" start="2008-02-12" duration="8" complete="0" priority="1" expand="false"/>
