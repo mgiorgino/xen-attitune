@@ -1,7 +1,7 @@
 !/bin/bash
 while :
 do
-	if xm list | grep $1 | grep -v p > /dev/null
+	if xm list | grep $1 | grep migrating > /dev/null
         then
                 ./chrono_launch
         fi
