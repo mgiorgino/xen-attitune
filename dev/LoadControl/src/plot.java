@@ -1,4 +1,3 @@
-package graphique;
 /* ===========================================================
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
@@ -69,22 +68,24 @@ import org.jfree.ui.RectangleInsets;
  * used, except that the renderer is modified to show filled shapes (as well as 
  * lines) at each data point.
  */
-public class Histograme extends JFrame {
-	TreeMap<Integer, Integer> data;
+public class plot extends JFrame {
+	TreeMap<Long, Double> data;
+	static String title;
     /**
      * A demonstration application showing how to create a simple time series 
      * chart.  This example uses monthly data.
      *
      * @param title  the frame title.
      */
-    public Histograme(String title, TreeMap<Integer, Integer> data) {
+    public plot(String title, TreeMap<Long, Double> data) {
         super(title);
+        this.title = title;
         this.data = data;
         ChartPanel chartPanel = (ChartPanel) createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         chartPanel.setMouseZoomable(true, false);
         setContentPane(chartPanel);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     /**
@@ -94,14 +95,12 @@ public class Histograme extends JFrame {
      * 
      * @return A chart.
      */
-    private static JFreeChart createChart(IntervalXYDataset dataset) {
-
-        JFreeChart chart = ChartFactory.createXYBarChart(
-            "Resources' Histogram",  // title
-            "Step Number",             // x-axis label
-            false,				// x-axis label?
-            "Frequency",   // y-axis label
-            dataset,            // data
+    private static JFreeChart createChart(IntervalXYDataset dataset){
+    	JFreeChart chart = ChartFactory.createXYLineChart(
+    		title,  //titlee
+            "Execution time (s)",  //  Step Number     // x-axis label
+            "CPU Load average", //Frequencyaxis label
+            dataset, // dataset
             PlotOrientation.VERTICAL,		//Orientation
             false,               // create legend?
             true,               // generate tooltips?
@@ -123,6 +122,7 @@ public class Histograme extends JFrame {
             XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
             renderer.setBaseShapesVisible(true);
             renderer.setBaseShapesFilled(true);
+            renderer.setSeriesShapesVisible(0, false);
         }
        return chart;
 
@@ -136,7 +136,7 @@ public class Histograme extends JFrame {
     private IntervalXYDataset createDataset() {
     	
         XYSeries s1 = new XYSeries("Resource ");
-        for (Integer i : data.keySet()){
+        for (Long i : data.keySet()){
         	s1.add(i, data.get(i));
         }
         
@@ -157,76 +157,4 @@ public class Histograme extends JFrame {
         return new ChartPanel(chart);
     }
     
-    
-//    public static void main(String[] args) {
-//
-//        TimeSeries1 demo = new TimeSeries1(
-//                "Time Series Chart Demo 1");
-//        demo.pack();
-//        RefineryUtilities.centerFrameOnScreen(demo);
-//        demo.setVisible(true);
-//
-//    }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

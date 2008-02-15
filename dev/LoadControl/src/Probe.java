@@ -17,7 +17,7 @@ public class Probe {
 	}
 	
 	public double exploit(String trucmuche, int nbProc){
-		return Double.parseDouble(trucmuche.substring(0, 4))/nbProc;
+		return Double.parseDouble(trucmuche.split(" ")[0])/nbProc;
 		
 	}
 }
