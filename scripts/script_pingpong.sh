@@ -1,4 +1,11 @@
-!/bin/bash
+#!/bin/bash
+
+if [ $# != 2 ]
+then
+	echo "use : ping_pong <VM-name> <dest-address>";
+	exit 1;
+fi
+
 while :
 do
 	if xm list | grep $1 | grep -v p > /dev/null
