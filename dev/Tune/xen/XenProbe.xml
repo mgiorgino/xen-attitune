@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<wrapper name='XenProbe'>
+
+	<method name="start" key="xen.Probe" method="bidon" >
+		<param value="$tubeAddr"/>
+		<param value="$probed.srname"/>
+	</method>
+	
+	<method name="stop" key="xen.Probe" method="baril" >
+		<param value="$tubeAddr"/>
+		<param value="$probed.srname"/>
+	</method>
+</wrapper>
