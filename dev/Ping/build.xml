@@ -1,0 +1,71 @@
+<project>
+
+	<fileset dir="lib" id="libs">
+		<include name="*.jar"/>
+	</fileset>
+	
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="compile" description="--> compile Ping">
+        <javac srcdir="src"
+         destdir="bin"
+         debug="on">
+        	<classpath>
+        		<fileset id="libs"/>
+        	</classpath>
+		</javac>
+    </target>
+
+	
+	<!-- ================================= 
+          target: jar              
+         ================================= -->
+    <target name="jar" depends="compile" description="--> compile and create an executable jar">
+<!--
+    	<manifestclasspath jarfile="Ping.jar" property="">
+    		<classpath>
+    			<fileset id="libs" dir="lib"/>
+    		</classpath>
+    	</manifestclasspath>
+-->
+    	<jar destfile="Ping.jar">
+    		<fileset dir="bin" id="bins">
+    			<include name="*.class"/>
+			</fileset>
+            <manifest>
+    	        <attribute name="Class-Path"
+    	        	value="lib/jfreechart-1.0.9.jar lib/jcommon-1.0.12.jar"/>
+            	<attribute name="Main-Class" value="Ping"/>
+			</manifest>
+    	</jar>
+    </target>
+	
+	<!-- ================================= 
+          target: tgz
+         ================================= -->
+    <target name="tgz" depends="jar" description="--> build a tar.gz file">
+    	<tar compression="gzip" destfile="Ping.tgz">
+    		  <tarfileset dir=".">
+    		    <include name="Ping.jar"/>
+    		  </tarfileset>
+    	</tar>
+    	<!--
+        	<gzip src="Ping.tar" zipfile="Ping.tar.gz"/>
+        -->
+    </target>
+
+	<!-- ================================= 
+          target: run              
+         ================================= -->
+    <target name="run" depends="jar" description="--> run the Ping">
+        <java>
+        	<arg value="-jar"/>
+        	<fileset dir="/" id="">
+    			<include name="include"/>
+			</fileset>
+        </java>
+    </target>
+
+
+</project>
