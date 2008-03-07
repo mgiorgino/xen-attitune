@@ -72,6 +72,10 @@ public class Ping {
 		}else{
 			host = JOptionPane.showInputDialog("Host address", "192.168.2.");
 		}
+		
+		if(host == null){
+			host = "localhost";
+		}
 
 		System.out.println("Ping de "+ host);
 

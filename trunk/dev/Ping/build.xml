@@ -3,6 +3,31 @@
 	<fileset dir="lib" id="libs">
 		<include name="*.jar"/>
 	</fileset>
+
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" description="--> clean">
+    	<delete>
+			<fileset dir=".">
+	    		<include name="bin/*.class"/>
+				<include name="Ping.jar"/>
+			</fileset>
+		</delete>
+    </target>
+
+	<!-- ================================= 
+          target: cleanall              
+         ================================= -->
+    <target name="cleanall" description="--> clean all">
+    	<delete>
+			<fileset dir=".">
+	    		<include name="bin/*"/>
+				<include name="Ping.jar"/>
+				<include name="Ping.tgz"/>
+			</fileset>
+		</delete>
+    </target>
 	
 	<!-- ================================= 
           target: build              
@@ -12,7 +37,10 @@
          destdir="bin"
          debug="on">
         	<classpath>
-        		<fileset id="libs"/>
+        		<fileset dir="lib" id="libs">
+					<include name="jcommon-1.0.12.jar"/>
+					<include name="jfreechart-1.0.9.jar"/>
+				</fileset>
         	</classpath>
 		</javac>
     </target>
