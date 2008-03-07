@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<wrapper name='XenProbe'>
+
+	<method name="start" key="xen.Probe" method="create" >
+		<param value="$tubeAddr"/>
+		<param value="$probed.srname"/>
+		<param value="1"/>
+	</method>
+	
+	<method name="terminate" key="xen.Probe" method="finalize" >
+	</method>
+</wrapper>
