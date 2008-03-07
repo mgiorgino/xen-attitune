@@ -1,0 +1,3 @@
+#!/bin/bash
+java  -Dfractal.provider=org.objectweb.fractal.julia.Julia  -Djulia.loader=org.objectweb.fractal.julia.loader.DynamicLoader -Djulia.config=etc/julia.cfg -jar TUNe.jar $1
+

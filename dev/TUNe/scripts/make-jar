@@ -1,0 +1,17 @@
+#!/bin/bash
+mkdir tmp
+cp ../lib/*jar tmp/
+cp -r ../classes/* tmp/
+cd tmp
+rm -rf META-INF
+for i in `ls *jar`;
+do
+	jar xf $i
+done
+rm *jar
+touch MANIFEST.MF
+echo "Main-class: system.Generator" > MANIFEST.MF
+jar cmf MANIFEST.MF TUNe.jar *
+cp TUNe.jar ../../output
+cd ..
+rm -rf tmp

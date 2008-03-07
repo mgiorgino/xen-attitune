@@ -1,0 +1,329 @@
+\documentclass[times,12pt]{article}
+
+%\usepackage{multicol}
+%\usepackage{setspace}
+%\doublespacing
+\usepackage[latin1]{inputenc}
+\usepackage{latex8}
+\usepackage{times}
+\usepackage{graphicx}
+
+%% -------------------------------------
+%% New packages and functions:
+%% -------------------------------------
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{float}
+\usepackage{epsfig}
+
+\floatplacement{figure}{H}
+\def\keywords#1{\vspace{-3pt}\noindent{\small\textsc{key words:}%
+\hspace*{1em}#1}\vskip 0.1pt \normalsize\par\noindent}
+
+%\pagestyle{empty}
+
+\begin{document}
+
+\title{DOCUMENTATION UTILISATEUR DE TUNe}
+
+
+\author{
+\normalsize Patricia STOLF\\
+\small IRIT, CNRS, France\\
+\small patricia.stolf@toulouse.iufm.Fr
+\and TUNe team !
+\normalsize \\
+\small INP, France\\
+\small 
+}
+
+
+\maketitle
+
+
+
+%% -------------------------------------
+%% Abstract
+%% -------------------------------------
+\begin{abstract}
+\end{abstract}
+
+\keywords{Autonomic management, Legacy systems, Self-optimization, Cluster, J2EE}
+
+%% -------------------------------------
+%% 1 Introduction
+%% -------------------------------------
+\section{Introduction}
+\label{sec:1-Introduction}
+
+
+
+%% -------------------------------------
+%% 2 Experimental Context: Multi-Tier Internet Services
+%% -------------------------------------
+\section{Comment lancer la version de démonstration de Tune ?}
+\label{sec:2-VersionDemo}
+L'objectif de cette section est de présenter comment lancer la version de démonstration fournie avec TUNe sous la forme du fichier tune.tgz.
+La version de démonstration permet de lancer omniNames et une architecture Diet très simple composée d'un MA, d'un LA et d'un SeD réalisant le calcul MatSUM.
+Pour faire tourner la version de démonstration, il faut :
+
+\begin{itemize}
+	\item installer le jdk 1.6 sur la machine (ou les machines si on souhaite lancer la démonstration en mode distribué),
+	\item installer ant sur la machine qui lance le déploiement
+	\item installer Diet (pour plus d'informations voir la section~\ref{sec:InstallDiet})
+	\item créer les archives (.tgz) pour les agents et serveurs diet. Ces archives doivent contenir les binaires 
+et les librairies nécesaires (pour plus d'informations voir la section~\ref{sec:CreationTarball})
+	\item gérer les clés ssh de façon à ce que l'usager courant puisse se connecter aux machines avec ssh sans taper son mot de passe et le jdk employé après connexion par ssh est bien le jdk 1.6.
+Pour plus d'informations voir la section~\ref{sec:GestionCles}.
+\end{itemize}
+
+La version actuelle ne gère pas les spécificités des noeuds (variable PATH notamment).
+Ainsi il est nécessaire d'indiquer le chemin d'installation de java à différents endroits :
+\begin{itemize}
+	\item dans le fichier NodeAllocatorImpl.java
+	\item dans les fichiers XML des sondes	
+\end{itemize}
+
+Il existe trois modes de lancement de Tune :
+\begin{itemize}
+	\item en mode "silent" où les seuls affichages correspondent aux traces locales de TUNe
+	\item en mode "v" où les affichages correspondent aux traces lcoales et aux affichages des méthodes distantes
+	\item en mode "vv" où les affichages correspondent aux traces lcoales, aux affichages des méthodes distantes et aux affichages des applicatifs legacy que TUNe déploie.
+\end{itemize}
+
+Pour changer de mode de lancement, il faut modifier le fichier build.xml au niveau de la balise de l'application :
+%%<target name="diet" description="Example with one MA-LA-SED">
+%%    <java classname="system.Generator"
+%%          classpathref="appli.classpath"
+%%          fork="yes"
+        %%  dir="${examples.dir}/Diet"
+%%          failonerror="yes">
+        %%<jvmarg line="${run.jvm.parameters}"/>
+%%      <arg line="diet.xmi -silent ${env.OAR_NODEFILE}"/>
+%%    </java>
+%%   </target>
+
+Par défaut, le NodeAllocator de TUNe va fontionner en local, sauf si la variable $OAR_NODEFILE$ est positionnée auquel cas le NodeALlocator
+prendra cet ensemble de machines et les attribuera selon la politique du "round robin".
+
+Lorsque tout ceci a été réalisé, on peut lancer la démonstration avec :
+- tar xzf tune.tgz
+- cd tune
+- ant clean compile dist diet
+
+L'application DIET a été déployée par TUNe losque nous avons le message "Application successfully deployed".
+
+Pour tester le déploiement réalisé nous pouvons faire un certain nombre de tests :
+\begin{itemize}
+	\item vérifier que tous les processus sont bien lancés avec un ps axf.
+	\item lancer un client DIET et vérifier que nous obtenons bien le résultat.
+	\item tester la réparation : tuer (avec un kill -9) un MA, LA ou SED. Si on tue un MA ou LA, TUNe relance tous les agents qui
+sont sous cette partie de l'arbre DIET (c'est une exigence de l'application DIET). Vérifier que tous les processus sont bien lancés  et qu'un calcul 
+peut toujours être réalisé.
+\end{itemize}
+
+\section{Comment déployer une application quelconque avec TUNe ?}
+\label{sec:3-deploiement}
+Pour déployer les applications, TUNe s'appuie sur un profil UML de l'application et des fichiers de descriptions des applications
+que l'on appele "wrapper". Les wrappers sont des fichiers XML et respectent un langage de description de wrapper.
+Dans cette section, nous expliquerons comment spécifier le profil UML de l'application à déployer ~\ref{sec:UML} puis dans une
+deuxième sous-partie, nous expliquerons comment écrire ou modifier les fichiers XML ~\ref{sec:XML}.
+
+\subsection{Description du profil UML de l'application}
+\label{sec:UML}
+
+Nous utilisons UML pour deux choses : spécifier le déploiement de l'application et spécifier les reconfigurations en cas de 
+
+Le profil UML pour spécifier le schéma de déploiement de l'application que TUNe doit installer et démarrer.
+Il s'agit d'un ensemble de diagrammes :
+
+\begin{itemize}
+	\item d'un diagramme de classes représentant les différents composants de l'application et leurs liaisons.
+	\item d'un ensemble de diagrammes d'états spécifiant les étapes du démarrage de l'applications, les étapes nécessaire à une reconfiguration de l'application
+\end{itemize}
+
+\subsubsection{Le diagramme de classes}
+Chaque classe du diagramme de déploiement contient un ensemble d attributs dont certains sont specifiques a l application et d autres
+sont necessaires a TUNE.
+
+Parmi les attributs utilisés par TUNe pour le déploiement, on trouve : 
+\begin{itemize}
+	\item wrapper : cet attribut de type chaîne de caractères contient le nom du fichier xml correspondant à la description du wrapper
+	\item legacyFile : cet attribut de type chaîne de caractères contient le nom de l'archive contenant les binaires et librairies à déployer
+	\item host-family : cet attribut de type chaîne de caractères contient le nom du cluster dans lequel le binaire doit être déployé
+	\item initial : cet attribut de type entier correspond au nombre d'instances à déployer. Par défaut, ce nombre vaut 1.
+\end{itemize}
+
+Les liaisons entre les classes du diagramme peuvent avoir différentes cardinalités : on peut distinguer trois cas (on note A(n) et B(m) les deux classes liées avec l'attribut initial de A qui vaut n et l'attribut initial de B qui vaut m):
+\begin{itemize}
+	\item  A(n) et B(m) sont liées par une liaison 1-1 : chaque classe A est liée à une classe B et vice versa. Il y a min(n, m) couples A-B ???? ou alors on impose que n=m ??????
+ 	\item  A(n) et B(m) sont liées par une liaison 1-u : chaque classe A est liée à u classes B et chaque classe B est liée à une seule classe A.
+Il y aura donc n classes A et n*u classes B. Ainsi, il est nécessaire que m=n*u.
+	\item  A(n) et B(m) sont liées par une liaison t-u : chaque classe A est liée à u classes B et chaque classe B est liée à t classes A.
+Dans ce cas, on a m=n*u/t avec m>=u et n>=t.
+\end{itemize}
+
+Le profil UML de l'application doit être écrit avec l'outil Umbrello.
+Le diagramme de classe doit s'appeler "deploiement".
+
+Dois je donner un exemple commenté ?
+
+\subsubsection{Les diagrammes d'états}
+Le diagramme de classes spécifie l'architecture de l'application. Les diagrammes d'état vont spécifier les étapes de démarrage de
+l'application et les étapes de reconfiguration de l'application en cas de panne par exemple.
+Dans umbrello, le diagramme d'états du démarrage s'appele "startchart".
+Les reconfigurations sont provoquées par un événement. Les évenements peuvent soit être envoyés par TUNe soit par un système de monitoring déjà existant.
+Pour réagir lors de la réception d'un événement TUNe s'appuie sur les diagrammes d'états du profil UML.
+Ainsi, on trouvera un diagramme définissant le workflow de démarrage et les diagrammes définissant les workflows de
+réaction aux événements suite à la détection d'une panne par une probe.
+
+Nous pouvons trouver deux types d'opérations dans les diagrammes d'état : affectation d'un/des attribut(s) ou appel d'une méthode sur ou plusieurs composants.
+La syntaxe sera la suivant : nom\_du\_composant.methode.
+Le nom du composant correspond au nom de sa classe dans le diagramme de classes et les méthodes appelées dans les états des diagrammes sont spécifiées dans les fichiers XML des wrappers. On trouvera ainsi les
+méthodes start, stop, configure qui sont explicitées dans le fichier XML dans les balises "<method name = "start" ......>" "</method>"
+
+Lorsqu'un composant génère un événement, il écrit dans un pipe une chaîne dont la syntaxe est la suivante : 
+nom\_evenement;qui\_a\_genere\_evenement;argument
+Le composant ayant généré l'événement s'appelle "this". L'argument est référençable dans les diagrammes d'état par la variable arg.
+
+Les diagrammes d'états doivent s'appeler "chart-nom\_du\_diagramme\_au\_choix", le "chart-" est imposé. Chaque diagramme doit comporter
+une note dans Umbrello indiquant le nom de l evenement auquel le diagramme répond.
+Il est possible d'indiquer plusieurs événements pour un diagramme, dans ce cas, il faut séparer les noms des événements dans la note
+par des ";". 
+Par exemple : dans le cas de la ProbeSed qui a détecté la panne d'un SeD (SED\_0) et qui génère l'événement fixSED, dans le pipe on trouve
+"fixSED;this;SED\_0"
+Dans umbrello, on doit avoir un diagramme d'état nommé "chart-fixSED" contenant la note "fixSED" et une suite d'états transitions
+permettant dans l'ordre : d'arrêter la sonde (sinon elle détectera indéfiniment la panne) avec this.stop car this correspond au composant ayant détecté
+la panne puis de redémarrer LE SED\_0 avec arg.start puisque arg correspond au composant appelé argument dans la chaîne du pipe et enfin de 
+redémarrer la sonde pour détecter d'éventuelles pannes futures avec this.start.
+
+cf ajouter le diagramme d'états correspondant.
+
+Il est possible de suivre les liaisons entre composants pour appliquer des méthodes sur des composants auxquels on est lié.
+Dans l' application Diet, lorsqu' un LA tombe en panne, il est n\'ecessaire de red\'emarrer tous les SED qui lui sont reli\'es. Ainsi dans
+le diagramme associe a levement fixLA, on trouvera l action arg.sed.stop afin d arreter tous les SED lies a arg (donc au LA qui
+est en panne).
+Les sondes des SED détecteront l'arrêt des SEDs et ainsi les diagrammes associés à l'événement fixSED seront exécutés à leur tour
+provoquant le redémarrage des SEDs.
+
+Ajouter le diagramme du LA ou MA ?
+
+Expliquer PID=\$arg ????
+
+\subsection{Langage de description des wrappers}
+\label{sec:XML}
+
+Lorsque TUNe parse le profil UML de l' application, des composants Fractal sont créés ; ils sont tous des instances
+d'un wrapper générique. Ce wrapper générique interprète le langage de description des wrappers et correspond à des implémentations Java génériques.
+Le langage de description d' un wrapper spécifie un ensemble de méthode pour configurer ou reconfigurer 
+l'applicatif wrappé. Ainsi, on trouve les définitions des méthodes start et stop utilisées dans les
+diagrammes d'états.
+On trouve également la méthode configure qui permet à TUNe de générer les fichiers de configurations
+nécessaires au déploiement de l' application.
+
+
+TUNe utilise un ensemble d'attributs par défaut :
+\begin{itemize}
+	\item  dirLocal : nom du répertoire de déploiement
+	\item compName : nom du composant ; il correspond au nom de la classe dans le diagramme UML
+	\item  srname : nom du composant dans le système de représentation (ce qui correspond à
+la représentation Fractal de l' application. srname se distingue de compName dans le cas de cardinalité multiple.
+Ainsi, si dans le diagramme de classe on a 5 instances de la classe SED, compName vaudra SED pour chacun mais srname 
+prendra SED\_0, SED\_1 ... SED\_4.
+	\item  PID : identificateur du processus
+	\item nodeName : nom du noeud sur lequel le composant est déployé
+\end{itemize}
+
+Dans le fichier XML, on accède aux attributs avec la notation \$attribut.
+Lorsque l'attribut correspond à un compName, il est possible d' accéder à un attribut
+du composant grâce à la notation \$compName.attribut (c'est utile pour accéder aux attributs d' un 
+composant auquel nous sommes liés dans le diagramme de classes).
+
+Ainsi, dans le wrapper du composant MA (fichier ma.xml) relié au composant omni dans le diagramme de classe 
+on trouvera la notation \$omni.nodeName pour accéder à l'attribut nodeName d'omni.
+
+!!!!!!!!!!!Donner un exemple commenté d'un fichier XML.
+
+Un wrapper commence par la balise : $<$wrapper name='nom du composant'$>$
+
+On trouve ensuite un ensemble de spécifications de méthodes grâce à des balises :
+
+$<$method name="start" key="appli.wrapper.util.GenericStart" method="start\_with\_pid\_linux" $>$
+$<$param value= "paramètres nécessaires .... "/$>$
+$<$/method$>$
+
+\begin{itemize}
+	\item  name : nom de la méthode que l'on retrouvera dans les diagrammes d'état
+	\item  key : nom de la classe java implémentant cette méthode
+	\item  method : nom de la méthode java qui sera appelée
+	\item  param value : paramètre de la méthode. Si la méthode attend plusieurs paramètres,
+nous aurons plusieurs lignes param value. 
+\end{itemize}
+
+
+Dans le cas de méthode configure, la signification
+des param value est un peu spécifique :
+\begin{itemize}
+	\item  premier param value : nom du fichier de configuration de l' application
+	\item deuxième param value : séparateur de champ dans le fichier de configuration
+	\item les param value suivant : la chaîne de caractères doit respecter la syntaxe
+suivante : "nom du paramètre à configurer:valeur"
+\end{itemize}
+
+Un wrapper se termine par $<$/wrapper$>$	
+
+%(see Figure~\ref{Fig:multi-tier-archi}).
+
+%
+% Figure 1
+%
+%\begin{figure}[H]
+%\begin{center}
+%\epsfig{file=figures/Fig-MultiTierArchi.eps,width=0.5\textwidth}
+%\caption{Architecture of dynamic web applications}
+%\label{Fig:multi-tier-archi}
+%\end{center}
+%\end{figure}
+
+.
+
+%% -------------------------------------
+%% Installation DIET
+%% -------------------------------------
+\section{Installation de DIET}
+\label{sec:InstallDiet}
+
+%% -------------------------------------
+%% Création tarballs
+%% -------------------------------------
+\section{Création des archives binaires}
+\label{sec:CreationTarball}
+
+%% -------------------------------------
+%% Gestion des clés ssh
+%% -------------------------------------
+\section{Gestion des clés ssh}
+\label{sec:GestionCles}
+ 
+%% -------------------------------------
+%% Comment lancer une expérimentation sur GRID 5000 
+%% -------------------------------------
+\section{Comment lancer une expérimentation sur GRID 5000 ?}
+\label{sec:expeGRID}
+
+\subsection{Expérimetation sur un cluster d'un site}
+\label{sec:expeCluster}
+
+\subsection{Expérimetation sur plusieurs sites}
+\label{sec:expeSites}
+
+%% -------------------------------------
+%% 7 Conclusion
+%% -------------------------------------
+\section{Conclusion}
+\label{sec:7-Conclusion}
+
+
+
+
+\end{document}

@@ -1,0 +1,1 @@
+java  -Dfractal.provider=org.objectweb.fractal.julia.Julia -Djulia.loader=org.objectweb.fractal.julia.loader.DynamicLoader  -Djulia.config=etc/julia.cfg -cp TUNe.jar core.main.Generator bete.uml -vv

@@ -1,0 +1,16 @@
+#!/bin/bash
+mkdir tmp
+cd tmp
+cp -r ../../examples/$1/* .
+rm TUNe.jar 2>/dev/null
+rm -rf etc 2>/dev/null
+cp -r ../../etc .
+cp -r ../../output/TUNe.jar .
+cp -r ../start-appli .
+rm -rf CVS
+mkdir $1
+mv * $1 2>/dev/null
+tar zcf $1-bundle.tgz $1
+cp $1-bundle.tgz ../../output
+cd ..
+rm -rf tmp
