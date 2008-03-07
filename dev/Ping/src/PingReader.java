@@ -18,7 +18,12 @@ import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-
+/**
+ * @author Xen-AttiTUNe
+ * 
+ * This class is intended to 
+ *
+ */
 public class PingReader extends Thread {
 
 	private XYSeriesCollection dataset = new XYSeriesCollection();
