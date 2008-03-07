@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<wrapper name='sondeBete'>
+
+	<method name="start" key="extension.GenericStart" method="start_with_pid_linux" >
+		<param value="$dirLocal/GenericPrintF $dirLocal/$srname '$GenericPrintT.moimeme'"/>
+	</method>
+	
+</wrapper>

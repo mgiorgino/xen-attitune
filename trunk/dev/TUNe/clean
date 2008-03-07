@@ -1,0 +1,14 @@
+for i in `ps axf | grep RemoteLauncher | cut -f1 -d' '`; do kill -9 $i; done
+for i in `ps axf | grep RemoteLauncher | cut -f2 -d' '`; do kill -9 $i; done
+for i in `ps axf | grep RemoteLauncher | cut -f3 -d' '`; do kill -9 $i; done
+
+for i in `ps axf | grep DistributedProbe | cut -f1 -d' '`; do kill -9 $i; done
+for i in `ps axf | grep DistributedProbe | cut -f2 -d' '`; do kill -9 $i; done
+for i in `ps axf | grep DistributedProbe | cut -f3 -d' '`; do kill -9 $i; done
+
+
+killall -9 GenericSonde
+killall -9 dietAgent
+killall -9 server
+killall -9 bete
+killall -9 omniNames

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<wrapper name='bete'>
+
+	<method name="start" key="extension.GenericStart" method="start_with_pid_linux" >
+		<param value="$dirLocal/bete $node.test"/>
+	</method>
+
+	<method name="stop" key="extension.GenericStop" method="stop_with_pid_linux" >
+		<param value="$PID"/>
+	</method>
+	
+	<method name="configure" key="extension.GenericConfigureXML" method="configure">
+		<param value="$dirLocal/fake.xml"/>
+		<param value="root/a(a=2)/a:3"/>
+	</method>
+	
+	
+	
+</wrapper>

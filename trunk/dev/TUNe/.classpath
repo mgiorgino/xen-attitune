@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="*CVS*" kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/julia-asm.jar"/>
+	<classpathentry kind="lib" path="lib/julia-mixins.jar"/>
+	<classpathentry kind="lib" path="lib/julia-runtime.jar"/>
+	<classpathentry kind="lib" path="lib/sax.jar"/>
+	<classpathentry kind="lib" path="lib/fractal.jar"/>
+	<classpathentry kind="lib" path="lib/fractal-adl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="lib/dtdparser.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

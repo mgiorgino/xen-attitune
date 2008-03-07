@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<wrapper name='sondeBete'>
+
+	<method name="start" key="extension.GenericStart" method="start_with_pid_linux" >
+		<param value="$dirLocal/GenericSonde $probed.PID $tubeAddr $probed.srname fixLegacy"/>
+	</method>
+	
+	<method name="stop" key="extension.GenericStop" method="stop_with_pid_linux" >
+		<param value="$PID"/>
+	</method>
+	
+</wrapper>

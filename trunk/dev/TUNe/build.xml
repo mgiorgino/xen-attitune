@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+
+<!--test svn -->
+
+<project name="TUNe" default="dist" basedir=".">
+	
+  <property name="projectname" value="TUNe" />
+
+  <!-- Set the uncustomizable properties -->
+  <property name="src.dir" value="src" />
+  <property name="etc.dir" value="etc" />
+  <property name="classes.dir" value="classes" />
+  <property name="dist.dir" value="output" />
+  <property name="mylib.dir" value="lib"/>
+  <property name="examples.dir" value="examples"/>
+  <property environment="env"/>
+	
+  <!-- Properties files -->
+  <property file="${etc.dir}/execute.properties"/>
+
+
+  <!-- The classpath to be used to compile examples -->
+  <path id="base.classpath">
+    <pathelement location="${classes.dir}" />
+    <fileset dir="${mylib.dir}" includes="**/*.jar"/>
+   </path>
+
+
+  <target name="init">
+    <!-- directories building -->
+    <mkdir dir="${classes.dir}" />
+    <mkdir dir="${dist.dir}" />
+  </target>
+
+  <target name="clean" description="Removes all the generated files or directories">
+    <delete dir="${classes.dir}" />
+    <delete dir="${dist.dir}" />
+  </target>
+
+  <target name="compile" description="Compile the project" depends="init">
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" >
+      <classpath refid="base.classpath" />
+    </javac>
+ <!-- 	<copy todir="${classes.dir}">
+  	    <fileset dir="${src.dir}/components/fractal">
+  	      <include name="**/*.fractal"/>
+  	    </fileset>
+  	  </copy>-->
+  </target>
+
+  <target name="dist">
+    <exec executable="./make-jar" dir="scripts"/>
+  </target>
+
+  <target name="dist-diet" depends="dist">
+    <exec executable="./make-appli-bundle" dir="scripts">
+    	<arg value="Diet"/>
+    </exec>
+  </target>
+	
+  <path id="appli.classpath">
+    <pathelement location="${classes.dir}" />
+    <fileset dir="${mylib.dir}" includes="**/*.jar"/>
+  	<pathelement location="${examples.dir}/SimpleApacheLocal" />
+  	<pathelement location="${examples.dir}/Diet" />
+  </path>
+
+  <target name="apachelocalsimple" description="Example with one Apache-Tomcat-MySql system">
+    <java classname="core.main.Generator"
+          classpathref="appli.classpath"
+          fork="yes"
+          failonerror="yes">
+     	<jvmarg line="${run.jvm.parameters}"/>
+      <arg line="${examples.dir}/SimpleApacheLocal/SimpleApacheLocal.xmi -silent ${env.OAR_NODEFILE}"/>
+    </java>
+   </target>
+	
+  <target name="diet" description="Example with one MA-LA-SED">
+    <java classname="core.main.Generator"
+          classpathref="appli.classpath"
+          fork="yes"
+    	  dir="${examples.dir}/Diet"
+          failonerror="yes">
+     	<jvmarg line="${run.jvm.parameters}"/>
+      <arg line="diet.xmi -vv ${env.OAR_NODEFILE}"/>
+    </java>
+   </target>
+
+  <target name="bete" description="Example with only one trivial legacy">
+    <java classname="core.main.Generator"
+          classpathref="appli.classpath"
+          fork="yes"
+    	  dir="${examples.dir}/AppliBete"
+          failonerror="yes">
+     	<jvmarg line="${run.jvm.parameters}"/>
+      <arg line="bete.uml -vv"/>
+    </java>
+   </target>
+	
+	 <target name="tune" description="Launching tune">
+	    <java classname="core.main.Tune"
+	          classpathref="appli.classpath"
+	          fork="yes"
+	    	  dir="."
+	          failonerror="yes">
+	     	<jvmarg line="${run.jvm.parameters}"/>
+	    </java>
+	   </target>
+	
+
+</project>
+
+
