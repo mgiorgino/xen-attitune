@@ -1,0 +1,98 @@
+<project>
+
+	<fileset dir="lib" id="libs">
+		<include name="*.jar"/>
+	</fileset>
+	
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="compile" description="--> compile RMI and generate skeletons and stubs">
+        <javac srcdir="src"
+         destdir="bin"
+         debug="on">
+        	<classpath>
+        		<fileset id="libs"/>
+        	</classpath>
+		</javac>
+    </target>
+
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" description="--> clean">
+    	<delete>
+			<fileset dir=".">
+	    		<include name="bin/*.class"/>
+				<include name="RMIPing.jar"/>
+			</fileset>
+		</delete>
+    	<deltree dir="RMIPing"/>
+    </target>
+
+	<!-- ================================= 
+          target: cleanall              
+         ================================= -->
+    <target name="cleanall" description="--> clean all">
+    	<delete>
+			<fileset dir=".">
+	    		<include name="bin/*"/>
+				<include name="RMIPing.jar"/>
+				<include name="RMIPing.tgz"/>
+			</fileset>
+		</delete>
+    	<deltree dir="RMIPing"/>
+    </target>
+
+	<!-- ================================= 
+          target: jar              
+         ================================= -->
+    <target name="jar" depends="compile" description="--> compile and create client, server and common jars">
+<!--
+    	<manifestclasspath jarfile="Ping.jar" property="">
+    		<classpath>
+    			<fileset id="libs" dir="lib"/>
+    		</classpath>
+    	</manifestclasspath>
+-->
+    	<jar destfile="RMIPing.jar">
+    		<fileset dir="bin" id="bins">
+    			<include name="*.class"/>
+			</fileset>
+            <manifest>
+    	        <attribute name="Class-Path"
+    	        	value="lib/RMICommon.jar
+    	        	lib/jfreechart-1.0.9.jar
+    	        	lib/jcommon-1.0.12.jar"/>
+            	<attribute name="Main-Class" value="Ping"/>
+			</manifest>
+    	</jar>
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: rmiPingDir                   
+         - - - - - - - - - - - - - - - - - -->
+    <target name="rmiPingDir" depends="jar">
+    	<mkdir dir="RMIPing"/>
+    	<copy todir="RMIPing">
+    		<fileset dir=".">
+    			<include name="RMIPing.jar"/>
+    			<include name="client.policy"/>
+    		</fileset>
+    	</copy>
+    	<copydir dest="RMIPing/lib" src="lib"/>
+    </target>
+
+	<!-- ================================= 
+          target: tgz
+         ================================= -->
+    <target name="clientTGZ" depends="rmiPingDir" description="--> build a tar.gz file">
+    	<tar compression="gzip" destfile="RMIPing.tgz">
+			<tarfileset dir=".">
+				<include name="RMIPing.sh"/>
+				<include name="RMIPing/"/>
+			</tarfileset>
+    	</tar>
+    </target>
+
+</project>
