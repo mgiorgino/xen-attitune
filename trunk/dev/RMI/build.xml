@@ -1,0 +1,156 @@
+<project>
+
+	<fileset dir="lib" id="libs">
+		<include name="*.jar"/>
+	</fileset>
+	
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="compile" description="--> compile RMI and generate skeletons and stubs">
+        <javac srcdir="src"
+         destdir="bin"
+         debug="on">
+		</javac>
+    	<rmic base="bin">
+    		<include name="RMIServer.class"/>
+    	</rmic>
+    </target>
+
+	
+	<!-- ================================= 
+          target: jar              
+         ================================= -->
+    <target name="jar" depends="compile" description="--> compile and create client, server and common jars">
+<!--
+    	<manifestclasspath jarfile="Ping.jar" property="">
+    		<classpath>
+    			<fileset id="libs" dir="lib"/>
+    		</classpath>
+    	</manifestclasspath>
+-->
+    	<jar destfile="RMIClient.jar">
+    		<fileset dir="bin" id="bins">
+    			<include name="RMIClient.class"/>
+			</fileset>
+            <manifest>
+    	        <attribute name="Class-Path"
+    	        	value="RMICommon.jar"/>
+            	<attribute name="Main-Class" value="RMIClient"/>
+			</manifest>
+    	</jar>
+    	<jar destfile="RMIServer.jar">
+    		<fileset dir="bin" id="bins">
+    			<include name="RMIServer.class"/>
+			</fileset>
+            <manifest>
+    	        <attribute name="Class-Path"
+    	        	value="RMICommon.jar"/>
+            	<attribute name="Main-Class" value="RMIServer"/>
+			</manifest>
+    	</jar>
+    	<jar destfile="RMICommon.jar">
+    		<fileset dir="bin" id="bins">
+    			<include name="*.class"/>
+    			<exclude name="RMIClient.class" />
+    			<exclude name="RMIServer.class" />
+			</fileset>
+    	</jar>
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: clientDir                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clientDir" depends="jar">
+    	<mkdir dir="RMIClient"/>
+    	<copy todir="RMIClient">
+    		<fileset dir=".">
+    			<include name="RMIClient.jar"/>
+    			<include name="RMICommon.jar"/>
+    			<include name="client.policy"/>
+    		</fileset>
+    	</copy>
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: serverDir                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="serverDir" depends="jar">
+    	<mkdir dir="RMIServer"/>
+    	<copy todir="RMIServer">
+    		<fileset dir=".">
+    			<include name="RMIServer.jar"/>
+    			<include name="RMICommon.jar"/>
+    			<include name="server.policy"/>
+    		</fileset>
+    	</copy>
+    </target>
+
+
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" description="--> clean">
+    	<delete>
+			<fileset dir=".">
+	    		<include name="bin/*"/>
+			</fileset>
+		</delete>
+    	<deltree dir="RMIClient"/>
+    	<deltree dir="RMIServer"/>
+    </target>
+	
+	<!-- ================================= 
+          target: cleanall              
+         ================================= -->
+    <target name="cleanall" description="--> clean all">
+    	<delete>
+			<fileset dir=".">
+	    		<include name="bin/*"/>
+				<include name="RMIClient.jar"/>
+				<include name="RMIServer.jar"/>
+				<include name="RMICommon.jar"/>
+				<include name="RMIClient.tgz"/>
+				<include name="RMIServer.tgz"/>
+			</fileset>
+		</delete>
+    	<deltree dir="RMIClient"/>
+    	<deltree dir="RMIServer"/>
+    </target>
+
+	
+	<!-- ================================= 
+          target: clientTGZ
+         ================================= -->
+    <target name="clientTGZ" depends="clientDir" description="--> build a tar.gz file">
+    	<tar compression="gzip" destfile="RMIClient.tgz">
+			<tarfileset dir=".">
+				<include name="client.sh"/>
+				<include name="RMIClient/"/>
+			</tarfileset>
+    	</tar>
+    	<antcall target="clean"></antcall>
+    </target>
+	
+	<!-- ================================= 
+          target: serverTGZ
+         ================================= -->
+    <target name="serverTGZ" depends="serverDir" description="--> build a tar.gz file">
+    	<tar compression="gzip" destfile="RMIServer.tgz">
+			<tarfileset dir=".">
+				<include name="server.sh"/>
+				<include name="RMIServer/"/>
+			</tarfileset>
+    	</tar>
+    	<antcall target="clean"></antcall>
+    </target>
+
+	<!-- =================================
+          target: tgzs
+         ================================= -->
+    <target name="tgzs" description="--> description">
+        <antcall target="clientTGZ"></antcall>
+        <antcall target="serverTGZ"></antcall>
+    </target>
+
+</project>
